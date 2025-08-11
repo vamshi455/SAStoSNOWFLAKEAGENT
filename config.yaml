@@ -1,0 +1,51 @@
+migration:
+  # Source configuration
+  sas:
+    input_directory: "./sample_data"
+    include_patterns: ["*.sas", "*.SAS"]
+    exclude_patterns: ["*temp*", "*backup*"]
+    
+  # Target configuration  
+  snowflake:
+    account: "${SNOWFLAKE_ACCOUNT}"
+    user: "${SNOWFLAKE_USER}"
+    password: "${SNOWFLAKE_PASSWORD}"
+    warehouse: "MIGRATION_WH"
+    database: "MIGRATED_DB"
+    schema: "CONVERTED_SCHEMA"
+    
+  # Agent configuration
+  agents:
+    discovery:
+      complexity_threshold: 7
+      max_dependencies: 50
+      
+    schema:
+      naming_convention: "UPPER_SNAKE_CASE"
+      add_audit_columns: true
+      default_varchar_length: 255
+      
+    code_conversion:
+      preserve_comments: true
+      add_conversion_metadata: true
+      optimize_for_snowflake: true
+      
+    business_logic:
+      validation_threshold: 0.8
+      require_manual_review: true
+      
+    testing:
+      generate_sample_data: true
+      create_validation_queries: true
+      
+  # Output configuration
+  output:
+    base_directory: "./output"
+    generate_reports: true
+    save_intermediate_results: true
+    
+  # Logging configuration
+  logging:
+    level: "INFO"
+    file: "./logs/migration.log"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
